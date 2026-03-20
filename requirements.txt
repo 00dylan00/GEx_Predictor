@@ -1,3 +1,5 @@
 torch>=2.0.0,<3.0.0          # PyTorch for model inference
 rdkit-pypi>=2023.9.1          # RDKit for molecule parsing and standardization
 signaturizer>=0.1.0 
+numpy>=1.24.0
+certifi>=2024.0.0

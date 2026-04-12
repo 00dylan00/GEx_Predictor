@@ -84,11 +84,14 @@ class GEx_Predictor():
         with torch.no_grad():
             return model(x).cpu().numpy()
         
-    def predict(self, input_smile, input_type = "SMILES"):
+    def predict(self, input_smile, input_type="SMILES", as_dataframe=False):
+
+        if isinstance(input_smile, str):
+            input_smile = [input_smile]
 
         print(f"[INFO] Starting prediction — input_type={input_type}")
         print(f"ensemble={f'{len(self.predictor)} folds' if self.all_folds else 'best fold'}")
-               
+
         if input_type.upper() == "SMILES":
             standardized_smiles = self._standardize_smiles(input_smile)
             if standardized_smiles is None:
@@ -105,4 +108,14 @@ class GEx_Predictor():
         preds = np.mean(fold_preds, axis=0)
 
         print("[INFO] Prediction completed successfully.")
+
+        if as_dataframe:
+            import pandas as pd
+            genes = self.get_genes()
+            return pd.DataFrame(preds, index=input_smile, columns=genes)
+
         return preds
+    
+    def get_genes(self):
+        gene_list_path = project_root / "data" / "d1_gene_list.npy"
+        return np.load(gene_list_path, allow_pickle=True)

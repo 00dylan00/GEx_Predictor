@@ -59,16 +59,24 @@ cd GEx_Predictor
 
 
 # Usage
-from predictor import GEx_Predictor
+```python
+from gex_predictor import GEx_Predictor
 
 # Initialize the predictor
 predictor = GEx_Predictor()
 
-# Prediction from SMILES
-smiles = "CCO"
+# Prediction from SMILES — input must be a list of SMILES strings
+smiles = ["CCO", "c1ccccc1"]
 prediction = predictor.predict(smiles, input_type="SMILES")
+print(prediction)  # numpy array of shape (n_molecules, 1035)
 
-print(prediction)
+# Return a DataFrame with LINCS landmark gene names as columns
+df = predictor.predict(smiles, input_type="SMILES", as_dataframe=True)
+print(df)
+
+# Get the ordered list of predicted gene names
+genes = predictor.get_genes()
+```
 
 # Project Structure
 GEx_Predictor/
